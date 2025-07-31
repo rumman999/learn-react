@@ -1,0 +1,43 @@
+// contexts/UserContext.js (or whatever your context is for)
+import React, { createContext, useContext, useState } from 'react';
+
+// 1. Create the Context
+const UserContext = createContext();
+
+// 2. Create a Provider Component
+export const UserProvider = ({ children }) => {
+  const [user, setUser] = useState({ 
+    name: 'Guest', 
+    isLoggedIn: false 
+  });
+
+  // You can add more functions here
+  const login = (userData) => {
+    setUser({ ...userData, isLoggedIn: true });
+  };
+
+  const logout = () => {
+    setUser({ name: 'Guest', isLoggedIn: false });
+  };
+
+  // Always pass an object with your state and functions
+  const value = {
+    user,
+    set
+    <UserContext.Provider value={value}>
+      {children}
+    </UserContext.Provider>
+  );
+};
+
+// 3. Create a Custom Hook (This is the modern standard)
+export const useUser = () => {
+  const context = useContext(UserContext);
+  
+  // Always add this error check
+  if (context === undefined) {
+    throw new Error('useUser must be used within a UserProvider');
+  }
+  
+  return context;
+};
